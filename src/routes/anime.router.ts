@@ -7,9 +7,10 @@ import { Router } from "express";
 const animeRouter = Router();
 
 animeRouter.post(
-  "/anime",
+  "/animes",
   validateSchema<CreateAnime>(animeSchema),
   animeController.addAnime
 );
+animeRouter.get("/animes", animeController.getAnimes);
 
 export default animeRouter;
