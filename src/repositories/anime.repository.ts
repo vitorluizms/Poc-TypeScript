@@ -9,9 +9,16 @@ async function addAnime(body: CreateAnime) {
   );
 }
 
-async function validateAnime(name: string): Promise<number> {
-  const result = await db.query(`SELECT * FROM animes WHERE name = $1;`, [
-    name,
+async function validateAnime(parameter: string | number): Promise<number> {
+  let query = "";
+  if (typeof parameter === "number") {
+    query += "id";
+  } else {
+    query += "name";
+  }
+
+  const result = await db.query(`SELECT * FROM animes WHERE ${query} = $1;`, [
+    parameter,
   ]);
   return result.rowCount;
 }
@@ -20,4 +27,14 @@ async function getAnimes(): Promise<Anime[]> {
   const result = await db.query(`SELECT * FROM animes;`);
   return result.rows;
 }
-export const animeRepository = { addAnime, validateAnime, getAnimes };
+
+export async function updateAnime(query: string, params: Array<number>) {
+  return db.query(`UPDATE animes SET ${query} WHERE id = $1;`, params);
+}
+
+export const animeRepository = {
+  addAnime,
+  validateAnime,
+  getAnimes,
+  updateAnime,
+};

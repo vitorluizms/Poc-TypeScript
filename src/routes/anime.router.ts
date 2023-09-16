@@ -1,7 +1,7 @@
 import animeController from "@/controllers/anime.controller";
 import { validateSchema } from "@/middlewares/validateSchema";
-import { CreateAnime } from "@/protocols/protocol";
-import { animeSchema } from "@/schemas/schemas";
+import { CreateAnime, UpdateAnime } from "@/protocols/protocol";
+import { animeSchema, updateSchema } from "@/schemas/schemas";
 import { Router } from "express";
 
 const animeRouter = Router();
@@ -12,5 +12,10 @@ animeRouter.post(
   animeController.addAnime
 );
 animeRouter.get("/animes", animeController.getAnimes);
+animeRouter.patch(
+  "/animes",
+  validateSchema<UpdateAnime>(updateSchema),
+  animeController.updateAnime
+);
 
 export default animeRouter;

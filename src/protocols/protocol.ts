@@ -12,3 +12,9 @@ export type Error = {
   code: number;
   message: string;
 };
+
+export type UpdateAnime = {
+  id: number;
+  episodes?: number;
+  seasons?: number;
+};

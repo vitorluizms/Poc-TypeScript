@@ -1,4 +1,4 @@
-import { Anime, CreateAnime } from "@/protocols/protocol";
+import { Anime, CreateAnime, UpdateAnime } from "@/protocols/protocol";
 import { animeService } from "@/services/anime.service";
 import { Request, Response } from "express";
 import httpStatus, { CREATED } from "http-status";
@@ -16,5 +16,11 @@ async function getAnimes(req: Request, res: Response) {
   res.status(httpStatus.OK).send(body);
 }
 
-const animeController = { addAnime, getAnimes };
+async function updateAnime(req: Request, res: Response) {
+  const body = req.body as UpdateAnime;
+  await animeService.updateAnime(body);
+  res.status(httpStatus.CREATED).send("Anime alterado com sucesso!");
+}
+
+const animeController = { addAnime, getAnimes, updateAnime };
 export default animeController;
