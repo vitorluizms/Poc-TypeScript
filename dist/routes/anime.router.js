@@ -11,4 +11,5 @@ var animeRouter = (0, express_1.Router)();
 animeRouter.post("/animes", (0, validateSchema_1.validateSchema)(schemas_1.animeSchema), anime_controller_1.default.addAnime);
 animeRouter.get("/animes", anime_controller_1.default.getAnimes);
 animeRouter.patch("/animes", (0, validateSchema_1.validateSchema)(schemas_1.updateSchema), anime_controller_1.default.updateAnime);
+animeRouter.delete("/animes/:id", anime_controller_1.default.deleteAnime);
 exports.default = animeRouter;

@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.animeService = void 0;
 var conflict_1 = require("../errors/conflict");
 var notAccetable_1 = require("../errors/notAccetable");
+var notFound_1 = require("../errors/notFound");
 var anime_repository_1 = require("../repositories/anime.repository");
 function addAnime(body) {
     return __awaiter(this, void 0, void 0, function () {
@@ -74,12 +75,18 @@ function getAnimes() {
 }
 function updateAnime(body) {
     return __awaiter(this, void 0, void 0, function () {
-        var query, params;
+        var validate, query, params;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!body.episodes && !body.seasons) {
                         throw (0, notAccetable_1.notAccetable)("Envie ao menos um dado para alteração!");
+                    }
+                    return [4 /*yield*/, anime_repository_1.animeRepository.validateAnime(body.id)];
+                case 1:
+                    validate = _a.sent();
+                    if (validate === 0) {
+                        throw (0, notFound_1.notFound)("O anime indicado não existe!");
                     }
                     query = "";
                     params = [body.id];
@@ -95,11 +102,34 @@ function updateAnime(body) {
                         params.push(body.seasons);
                     }
                     return [4 /*yield*/, anime_repository_1.animeRepository.updateAnime(query, params)];
-                case 1:
+                case 2:
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-exports.animeService = { addAnime: addAnime, getAnimes: getAnimes, updateAnime: updateAnime };
+function deleteAnime(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (isNaN(id)) {
+                        throw (0, notAccetable_1.notAccetable)("Envie um id correto!");
+                    }
+                    return [4 /*yield*/, anime_repository_1.animeRepository.validateAnime(id)];
+                case 1:
+                    result = _a.sent();
+                    if (result === 0) {
+                        throw (0, notFound_1.notFound)("O id enviado não corresponde a um anime existente!");
+                    }
+                    return [4 /*yield*/, anime_repository_1.animeRepository.deleteAnime(id)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.animeService = { addAnime: addAnime, getAnimes: getAnimes, updateAnime: updateAnime, deleteAnime: deleteAnime };

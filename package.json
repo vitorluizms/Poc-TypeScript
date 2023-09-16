@@ -25,7 +25,7 @@
     "pg": "^8.11.3"
   },
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "npm i && tsc && npx tsc-alias",
     "start": "node dist/index.js",
     "dev": "npx nodemon src/index.ts"
   },

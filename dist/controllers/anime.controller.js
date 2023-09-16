@@ -88,5 +88,21 @@ function updateAnime(req, res) {
         });
     });
 }
-var animeController = { addAnime: addAnime, getAnimes: getAnimes, updateAnime: updateAnime };
+function deleteAnime(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = req.params.id;
+                    return [4 /*yield*/, anime_service_1.animeService.deleteAnime(Number(id))];
+                case 1:
+                    _a.sent();
+                    res.send("a");
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+var animeController = { addAnime: addAnime, getAnimes: getAnimes, updateAnime: updateAnime, deleteAnime: deleteAnime };
 exports.default = animeController;

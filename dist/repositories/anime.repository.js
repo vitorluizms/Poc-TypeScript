@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.animeRepository = exports.updateAnime = void 0;
+exports.animeRepository = void 0;
 var connection_database_1 = __importDefault(require("../database/connection.database"));
 function addAnime(body) {
     return __awaiter(this, void 0, void 0, function () {
@@ -54,14 +54,22 @@ function addAnime(body) {
         });
     });
 }
-function validateAnime(name) {
+function validateAnime(parameter) {
     return __awaiter(this, void 0, void 0, function () {
-        var result;
+        var query, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, connection_database_1.default.query("SELECT * FROM animes WHERE name = $1;", [
-                        name,
-                    ])];
+                case 0:
+                    query = "";
+                    if (typeof parameter === "number") {
+                        query += "id";
+                    }
+                    else {
+                        query += "name";
+                    }
+                    return [4 /*yield*/, connection_database_1.default.query("SELECT * FROM animes WHERE ".concat(query, " = $1;"), [
+                            parameter,
+                        ])];
                 case 1:
                     result = _a.sent();
                     return [2 /*return*/, result.rowCount];
@@ -85,14 +93,27 @@ function getAnimes() {
 function updateAnime(query, params) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, connection_database_1.default.query("UPDATE animes SET ".concat(query, " WHERE id = $1;"), params)];
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, connection_database_1.default.query("UPDATE animes SET ".concat(query, " WHERE id = $1;"), params)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
         });
     });
 }
-exports.updateAnime = updateAnime;
+function deleteAnime(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, connection_database_1.default.query("DELETE FROM animes WHERE id = $1;", [id])];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
 exports.animeRepository = {
     addAnime: addAnime,
     validateAnime: validateAnime,
     getAnimes: getAnimes,
     updateAnime: updateAnime,
+    deleteAnime: deleteAnime,
 };
