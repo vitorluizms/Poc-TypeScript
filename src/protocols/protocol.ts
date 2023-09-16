@@ -18,3 +18,7 @@ export type UpdateAnime = {
   episodes?: number;
   seasons?: number;
 };
+
+export type DeleteAnime = {
+  id: number;
+};

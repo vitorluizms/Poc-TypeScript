@@ -28,8 +28,12 @@ async function getAnimes(): Promise<Anime[]> {
   return result.rows;
 }
 
-export async function updateAnime(query: string, params: Array<number>) {
-  return db.query(`UPDATE animes SET ${query} WHERE id = $1;`, params);
+async function updateAnime(query: string, params: Array<number>) {
+  return await db.query(`UPDATE animes SET ${query} WHERE id = $1;`, params);
+}
+
+async function deleteAnime(id: number) {
+  return await db.query(`DELETE FROM animes WHERE id = $1;`, [id]);
 }
 
 export const animeRepository = {
@@ -37,4 +41,5 @@ export const animeRepository = {
   validateAnime,
   getAnimes,
   updateAnime,
+  deleteAnime,
 };

@@ -17,5 +17,6 @@ animeRouter.patch(
   validateSchema<UpdateAnime>(updateSchema),
   animeController.updateAnime
 );
+animeRouter.delete("/animes/:id", animeController.deleteAnime);
 
 export default animeRouter;

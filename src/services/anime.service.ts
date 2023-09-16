@@ -46,4 +46,17 @@ async function updateAnime(body: UpdateAnime) {
   await animeRepository.updateAnime(query, params);
 }
 
-export const animeService = { addAnime, getAnimes, updateAnime };
+async function deleteAnime(id: number) {
+  if (isNaN(id)) {
+    throw notAccetable("Envie um id correto!");
+  }
+
+  const result = await animeRepository.validateAnime(id);
+  if (result === 0) {
+    throw notFound("O id enviado não corresponde a um anime existente!");
+  }
+
+  await animeRepository.deleteAnime(id);
+}
+
+export const animeService = { addAnime, getAnimes, updateAnime, deleteAnime };
