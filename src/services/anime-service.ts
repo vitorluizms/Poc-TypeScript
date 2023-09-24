@@ -1,13 +1,14 @@
 import { conflict } from "@/errors/conflict";
 import { notAccetable } from "@/errors/notAccetable";
 import { notFound } from "@/errors/notFound";
-import { Anime, CreateAnime, UpdateAnime } from "@/protocols/protocol";
+import { CreateAnime, UpdateAnime } from "@/protocols/protocol";
 import { animeRepository } from "@/repositories/anime.repository";
+import { Anime } from "@prisma/client";
 import { valid } from "joi";
 
 async function addAnime(body: CreateAnime) {
-  const result: number = await animeRepository.validateAnime(body.name);
-  if (result > 0) {
+  const result: Anime = await animeRepository.validateAnimeByName(body.name);
+  if (result) {
     throw conflict("Esse anime já está cadastrado!");
   }
   await animeRepository.addAnime(body);
@@ -23,27 +24,12 @@ async function updateAnime(body: UpdateAnime) {
     throw notAccetable("Envie ao menos um dado para alteração!");
   }
 
-  const validate = await animeRepository.validateAnime(body.id);
-  if (validate === 0) {
+  const validate = await animeRepository.validateAnimeById(body.id);
+  if (!validate) {
     throw notFound("O anime indicado não existe!");
   }
-  let query = "";
-  let params = [body.id];
-  if (body.episodes) {
-    query += `${
-      body.seasons ? "episodes = $2, seasons = $3" : "episodes = $2"
-    }`;
 
-    params.push(body.episodes);
-    if (body.seasons) {
-      params.push(body.seasons);
-    }
-  } else if (body.seasons) {
-    query += "seasons = $2";
-    params.push(body.seasons);
-  }
-
-  await animeRepository.updateAnime(query, params);
+  await animeRepository.updateAnime(body);
 }
 
 async function deleteAnime(id: number) {
@@ -51,8 +37,8 @@ async function deleteAnime(id: number) {
     throw notAccetable("Envie um id correto!");
   }
 
-  const result = await animeRepository.validateAnime(id);
-  if (result === 0) {
+  const result = await animeRepository.validateAnimeById(id);
+  if (!result) {
     throw notFound("O id enviado não corresponde a um anime existente!");
   }
 

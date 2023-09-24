@@ -1,10 +1,4 @@
-export type Anime = {
-  id: number;
-  name: string;
-  gender: string;
-  episodes: number;
-  seasons: number;
-};
+import { Anime } from "@prisma/client";
 
 export type CreateAnime = Omit<Anime, "id">;
 
@@ -17,6 +11,7 @@ export type UpdateAnime = {
   id: number;
   episodes?: number;
   seasons?: number;
+  name?: string;
 };
 
 export type DeleteAnime = {

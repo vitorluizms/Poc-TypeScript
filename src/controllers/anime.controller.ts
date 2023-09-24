@@ -1,10 +1,6 @@
-import {
-  Anime,
-  CreateAnime,
-  DeleteAnime,
-  UpdateAnime,
-} from "@/protocols/protocol";
-import { animeService } from "@/services/anime.service";
+import { CreateAnime, UpdateAnime } from "@/protocols/protocol";
+import { animeService } from "@/services/anime-service";
+import { Anime } from "@prisma/client";
 import { Request, Response } from "express";
 import httpStatus, { CREATED } from "http-status";
 
